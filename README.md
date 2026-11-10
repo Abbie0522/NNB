@@ -31,6 +31,16 @@ Three experiments were conducted:
 
 Each experiment runs for 30 epochs. The best model is selected using validation F1-score.
 
+## Getting Started
+
+After cloning the repository, navigate to the project directory:
+
+```powershell
+cd Offline_Assignment
+```
+
+Make sure Docker Desktop is running before executing the following commands.
+
 ## Docker Training
 
 Build the training image:
@@ -65,4 +75,4 @@ The training process saves the trained model, preprocessing pipeline, processed 
 
 ## Reproducibility
 
-The project uses a fixed random seed of 42 and pinned Python dependencies. The training and testing containers can be built and executed independently. Run the training container before the testing container to generate the required model and processed data.
+The project uses a fixed random seed of 42 and pinned Python dependencies. The training and testing containers use separate Docker images. Run the training container before the testing container to generate the required model and processed data.

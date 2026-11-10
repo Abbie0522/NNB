@@ -1,0 +1,6 @@
+age,job,marital,education,default,balance,housing,loan,contact,day,month,campaign,pdays,previous,poutcome,Actual,Predicted,Probability_Yes,Error_Type
+47,blue-collar,married,secondary,no,863,yes,no,unknown,19,may,2,-1,0,unknown,1,0,0.046165742,False Negative
+57,management,married,tertiary,no,9103,no,yes,unknown,20,jun,2,-1,0,unknown,1,0,0.029540008,False Negative
+34,admin.,married,secondary,no,124,yes,no,telephone,14,may,4,366,2,other,1,0,0.026597897,False Negative
+80,retired,married,primary,no,1861,no,no,telephone,14,apr,2,-1,0,unknown,0,1,0.5631422,False Positive
+45,technician,married,secondary,no,1673,no,no,cellular,23,oct,1,-1,0,unknown,0,1,0.6927134,False Positive

@@ -1,4 +1,3 @@
-
 from pathlib import Path
 
 import numpy as np
@@ -8,6 +7,8 @@ import torch.nn as nn
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import json
+import joblib
 
 from sklearn.metrics import (
     accuracy_score,
@@ -21,7 +22,6 @@ from sklearn.metrics import (
 ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_DIR = ROOT / "Outputs"
 MODEL_DIR = ROOT / "Model"
-
 
 class BankMarketingMLP(nn.Module):
     def __init__(self, input_size):
@@ -37,6 +37,44 @@ class BankMarketingMLP(nn.Module):
     def forward(self, x):
         return self.network(x)
 
+def predict_new_customer(model, threshold):
+    sample_path = OUTPUT_DIR / "new_customer.json"
+
+    if not sample_path.exists():
+        print("\nNew sample prediction skipped: JSON file not found.")
+        return
+
+    with open(sample_path, "r", encoding="utf-8") as file:
+        sample = json.load(file)
+
+    preprocessor = joblib.load(OUTPUT_DIR / "preprocessor.pkl")
+
+    expected_features = list(preprocessor.feature_names_in_)
+    missing = [col for col in expected_features if col not in sample]
+    extra = [col for col in sample if col not in expected_features]
+
+    if missing or extra:
+        raise ValueError(
+            f"Missing features: {missing}; Extra features: {extra}"
+        )
+
+    customer = pd.DataFrame([
+        {col: sample[col] for col in expected_features}
+    ])
+
+    transformed = preprocessor.transform(customer)
+
+    with torch.no_grad():
+        inputs = torch.tensor(transformed, dtype=torch.float32)
+        probability = torch.sigmoid(model(inputs)).item()
+
+    prediction = "Yes" if probability >= threshold else "No"
+
+    print("\n--- New Customer Prediction ---")
+    print("Sample:", sample_path.name)
+    print(f"Probability of subscription (Yes): {probability:.4f}")
+    print(f"Prediction: {prediction}")
+    print(f"Decision threshold: {threshold:.2f}")
 
 def main():
     X_test = np.load(OUTPUT_DIR / "X_test.npy")
@@ -109,7 +147,7 @@ def main():
     print("\nConfusion Matrix:")
     print(cm)
     print("\nTesting completed successfully!")
-
+    predict_new_customer(model, threshold)
 
 if __name__ == "__main__":
     main()

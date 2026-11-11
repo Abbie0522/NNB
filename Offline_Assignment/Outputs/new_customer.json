@@ -1,0 +1,17 @@
+{
+  "age": 42,
+  "job": "management",
+  "marital": "married",
+  "education": "tertiary",
+  "default": "no",
+  "balance": 2500,
+  "housing": "yes",
+  "loan": "no",
+  "contact": "cellular",
+  "day": 15,
+  "month": "may",
+  "campaign": 1,
+  "pdays": -1,
+  "previous": 0,
+  "poutcome": "unknown"
+}
